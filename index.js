@@ -32,6 +32,45 @@ client.connect(err => {
                 res.send(items);
             })
     })
+    //manageProducts
+    app.get('/manageProducts', (req, res) => {
+
+        const bearer = req.headers.authorization;
+
+        if (bearer && bearer.startsWith('Bearer  ')) {
+            console.log(bearer);
+            const idToken = bearer.split('  ')[1];
+            console.log({ idToken });
+            admin.auth()
+                .verifyIdToken(idToken)
+                .then((decodedToken) => {
+                    const tokenEmail = decodedToken.email;
+                    // ...
+                    console.log(tokenEmail);
+                    if (tokenEmail === req.query.email) {
+                        email = tokenEmail;
+                        collection.find({ email }).toArray((err, documents) => {
+                            res.send(documents);
+                            console.log(documents);
+
+                            // })
+                        })
+                    }
+                    else {
+                        res.status(401).send('Un-authorized Access');
+                    }
+
+
+                })
+                .catch((error) => {
+                    // Handle error
+                    res.status(401).send('Un-authorized Access')
+                });
+        }
+        else {
+            res.status(401).send('Un-authorized Access');
+        }
+    });
 });
 
 
