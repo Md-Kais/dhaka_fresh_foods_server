@@ -14,7 +14,7 @@ app.use(bodyParser.json())
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.cjixa.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
-
+var serviceAccount = require("./dhakafreshfoods-firebase-adminsdk-h3leb-86f33fbfc9.json");
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount)
 });
