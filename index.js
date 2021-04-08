@@ -55,6 +55,11 @@ client.connect(err => {
                 res.send(documents);
             })
     })
+    app.delete('deleteProduct/:id',(req,res)=>{
+        const id=ObjectID(req.params.id);
+        collection.findOneAndDelete({_id:id})
+        .then(documents=>res.send(!!documents.value))
+    })
 
 
     //manageProducts
