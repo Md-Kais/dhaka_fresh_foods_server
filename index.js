@@ -45,21 +45,33 @@ client.connect(err => {
                 res.send(items);
             })
     })
+
+    //placed By orders
+    app.post('/productsByKeys', (req, res) => {
+        const productKeys = req.body;
+        productsCollection.find({ key: { $in: productKeys } })
+            .toArray((err, documents) => {
+                res.send(documents);
+            })
+    })
+
+
     //manageProducts
     app.get('/manageProducts', (req, res) => {
 
         const bearer = req.headers.authorization;
-
+        // console.log(bearer);
         if (bearer && bearer.startsWith('Bearer  ')) {
             console.log(bearer);
             const idToken = bearer.split('  ')[1];
-            console.log({ idToken });
+            //console.log({ idToken });
             admin.auth()
                 .verifyIdToken(idToken)
                 .then((decodedToken) => {
                     const tokenEmail = decodedToken.email;
                     // ...
-                    console.log(tokenEmail);
+                    // console.log(tokenEmail);
+                    // console.log(req.query.email);
                     if (tokenEmail === req.query.email) {
                         email = tokenEmail;
                         collection.find({ email }).toArray((err, documents) => {
