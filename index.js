@@ -50,9 +50,11 @@ client.connect(err => {
     app.post('/productsByKeys', (req, res) => {
         const productKeys = req.body;
         console.log(productKeys);
-        collection.find({ _id : { $in: productKeys } })
+        console.log(typeof(productKeys));
+        collection.find({ name : { $in: productKeys } })
             .toArray((err, documents) => {
                 res.send(documents);
+                console.log(err);
             })
     })
     app.delete('/deleteProduct/:id',(req,res)=>{
