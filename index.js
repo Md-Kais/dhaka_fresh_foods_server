@@ -30,6 +30,7 @@ client.connect(err => {
     console.log(uri);
     console.log(err);
     const collection = client.db("dhakaFreshFood").collection("foodItems");
+    const ordersCollection = client.db("dhakaFreshFood").collection("orders");
     app.post('/addProducts', (req, res) => {
         console.log(req.body);
         console.log('done');
@@ -37,6 +38,14 @@ client.connect(err => {
             .then(result => {
                 console.log(result);
                 res.send(result.insertedCount > 0);
+            })
+    })
+    app.post('/addOrder', (req, res) => {
+        const order = req.body;
+        ordersCollection.insertOne(order)
+            .then(result => {
+                console.log('done');
+                res.send(result.insertedCount > 0)
             })
     })
     app.get('/', (req, res) => {
@@ -62,7 +71,7 @@ client.connect(err => {
         collection.findOneAndDelete({_id:id})
         .then(documents=>res.send(!!documents.value))
     })
-
+    //add order
 
     //manageProducts
     app.get('/manageProducts', (req, res) => {
