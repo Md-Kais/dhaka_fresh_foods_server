@@ -73,7 +73,7 @@ client.connect(err => {
     })
     app.delete('/deleteOrder', (req, res) => {
         const email = req.query.email;
-        collection.findOneAndDelete({ email: email })
+        ordersCollection.findOneAndDelete({ email: email })
             .then(documents => res.send(!!documents.value))
     })
     //add order
