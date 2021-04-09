@@ -113,6 +113,47 @@ client.connect(err => {
             res.status(401).send('Un-authorized Access');
         }
     });
+
+    //get previous card
+    app.get('/getProductsCard', (req, res) => {
+
+        const bearer = req.headers.authorization;
+        // console.log(bearer);
+        if (bearer && bearer.startsWith('Bearer  ')) {
+            console.log(bearer);
+            const idToken = bearer.split('  ')[1];
+            //console.log({ idToken });
+            admin.auth()
+                .verifyIdToken(idToken)
+                .then((decodedToken) => {
+                    const tokenEmail = decodedToken.email;
+                    // ...
+                    // console.log(tokenEmail);
+                    // console.log(req.query.email);
+                    if (tokenEmail === req.query.email) {
+                        email = tokenEmail;
+                        ordersCollection.find({ email }).toArray((err, documents) => {
+                            res.send(documents);
+                            console.log(documents);
+
+                            // })
+                        })
+                    }
+                    else {
+                        res.status(401).send('Un-authorized Access');
+                    }
+
+
+                })
+                .catch((error) => {
+                    // Handle error
+                    res.status(401).send('Un-authorized Access')
+                });
+        }
+        else {
+            res.status(401).send('Un-authorized Access');
+        }
+    });
 });
 
 
