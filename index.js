@@ -59,17 +59,17 @@ client.connect(err => {
     app.post('/productsByKeys', (req, res) => {
         const productKeys = req.body;
         console.log(productKeys);
-        console.log(typeof(productKeys));
-        collection.find({ name : { $in: productKeys } })
+        console.log(typeof (productKeys));
+        collection.find({ name: { $in: productKeys } })
             .toArray((err, documents) => {
                 res.send(documents);
                 console.log(err);
             })
     })
-    app.delete('/deleteProduct/:id',(req,res)=>{
-        const id=ObjectID(req.params.id);
-        collection.findOneAndDelete({_id:id})
-        .then(documents=>res.send(!!documents.value))
+    app.delete('/deleteProduct/:id', (req, res) => {
+        const id = ObjectID(req.params.id);
+        collection.findOneAndDelete({ _id: id })
+            .then(documents => res.send(!!documents.value))
     })
     //add order
 
@@ -117,46 +117,21 @@ client.connect(err => {
     //get previous card
     app.get('/getProductsCard', (req, res) => {
 
-        const bearer = req.headers.authorization;
-        // console.log(bearer);
-        if (bearer && bearer.startsWith('Bearer  ')) {
-            console.log(bearer);
-            const idToken = bearer.split('  ')[1];
-            //console.log({ idToken });
-            admin.auth()
-                .verifyIdToken(idToken)
-                .then((decodedToken) => {
-                    const tokenEmail = decodedToken.email;
-                    // ...
-                    // console.log(tokenEmail);
-                    // console.log(req.query.email);
-                    if (tokenEmail === req.query.email) {
-                        email = tokenEmail;
-                        ordersCollection.find({ email }).toArray((err, documents) => {
-                            res.send(documents);
-                            console.log(documents);
 
-                            // })
-                        })
-                    }
-                    else {
-                        res.status(401).send('Un-authorized Access');
-                    }
+        const email = req.query.email;
+        ordersCollection.find({ email }).toArray((err, documents) => {
+            res.send(documents);
+            console.log(documents);
 
-
-                })
-                .catch((error) => {
-                    // Handle error
-                    res.status(401).send('Un-authorized Access')
-                });
-        }
-        else {
-            res.status(401).send('Un-authorized Access');
-        }
-    });
-});
+            // })
+        })
+    }
 
 
 
 
-app.listen(port);
+    );
+})
+
+
+    app.listen(port);
