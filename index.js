@@ -71,6 +71,11 @@ client.connect(err => {
         collection.findOneAndDelete({ _id: id })
             .then(documents => res.send(!!documents.value))
     })
+    app.delete('/deleteOrder', (req, res) => {
+        const email = req.query.email;
+        collection.findOneAndDelete({ email: email })
+            .then(documents => res.send(!!documents.value))
+    })
     //add order
 
     //manageProducts
